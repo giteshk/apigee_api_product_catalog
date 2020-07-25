@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_apigee_api_product
+    - node.type.api_product
+id: node.api_product.field_apigee_api_product
+field_name: field_apigee_api_product
+entity_type: node
+bundle: api_product
+label: 'Apigee API Product'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

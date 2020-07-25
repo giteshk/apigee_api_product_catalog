@@ -1,0 +1,35 @@
+<?php
+
+use Drupal\node\NodeInterface;
+
+function apigee_api_product_catalog_node_insert(NodeInterface $node)
+{
+  if ($node->getType() == 'api_product') {
+    foreach($node->get('field_api_doc')->referencedEntities() as $item){
+      \Drupal::entityTypeManager()->getAccessControlHandler('node')->writeGrants($item);
+    }
+  }
+}
+
+function apigee_api_product_catalog_node_update(NodeInterface $node)
+{
+  apigee_api_product_catalog_node_insert($node);
+}
+
+function apigee_api_product_catalog_node_delete(NodeInterface $node)
+{
+  apigee_api_product_catalog_node_insert($node);
+}
+
+function apigee_api_product_catalog_cron(){
+  /* @var $entity_manager \Drupal\Core\Entity\EntityTypeManagerInterface */
+  $entity_manager = Drupal::service("entity_type.manager");
+  /* @var $apiProduct \Drupal\apigee_edge\Entity\ApiProduct */
+  $serializer = new \Apigee\Edge\Serializer\EntitySerializer([new \Apigee\Edge\Api\Management\Serializer\ApiProductSerializer()]);
+  $apiproducts = [];
+  foreach($entity_manager->getStorage("api_product")->loadMultiple() as $apiProduct) {
+    /* @var $sdkobj \Apigee\Edge\Api\Management\Entity\ApiProduct */
+    $apiproducts['apiProduct'][] = $apiProduct->decorated();
+  }
+  file_put_contents("private://apigee_api_product_feed_importer/apiproducts.json", $serializer->serialize($apiproducts,'json'));
+}

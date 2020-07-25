@@ -1,0 +1,7 @@
+name: 'Apigee API Product Catalog  - Product Owners'
+type: module
+core: 8.x
+dependencies:
+  - apigee_api_product_catalog
+  - sm_appdashboard_apigee
+  - apigee_edge_apiproduct_rbac

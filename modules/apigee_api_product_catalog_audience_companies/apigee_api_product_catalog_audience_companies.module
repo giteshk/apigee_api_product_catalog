@@ -1,0 +1,46 @@
+<?php
+
+use Drupal\node\NodeInterface;
+use \Drupal\Core\Session\AccountInterface;
+
+function apigee_api_product_catalog_audience_roles_realm($role){
+  return "apigee_api_product_catalog_audience_roles:$role";
+}
+function apigee_api_product_catalog_audience_roles_node_access_records(NodeInterface $node)
+{
+  $grants = [];
+  if ($node->getType() == 'api_product') {
+    /* @var $role Drupal\Core\Field\Plugin\Field\FieldType\StringItem*/
+    foreach ($node->get("field_audience_roles") as $role) {
+        $grants[] = array(
+          'realm' => apigee_api_product_catalog_audience_roles_realm($role->getString()),
+          'gid' => 1,
+          'grant_view' => 1,
+          'grant_update' => 0,
+          'grant_delete' => 0
+        );
+    }
+  } else if ($node->getType() == 'apidoc') {
+      $nids = Drupal::entityQuery('node')
+        ->condition('type', 'api_product')
+        ->condition('field_api_doc', $node->id())
+        ->execute();
+      foreach(\Drupal\node\Entity\Node::loadMultiple($nids) as $product_node) {
+        $grants+=apigee_api_product_catalog_audience_roles_node_access_records($product_node);
+      }
+  }
+  return $grants;
+}
+
+function apigee_api_product_catalog_audience_roles_node_grants(AccountInterface $account, $op)
+{
+  $grants = [];
+  if ($account->id()) {
+    foreach($account->getRoles() as $role) {
+      $grants[apigee_api_product_catalog_audience_roles_realm($role)] = [1];
+    }
+  } else {
+    $grants[apigee_api_product_catalog_audience_roles_realm(AccountInterface::ANONYMOUS_ROLE)] = [1];
+  }
+  return $grants;
+}

@@ -1,0 +1,231 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.api_product.body
+    - field.field.node.api_product.field_api_doc
+    - field.field.node.api_product.field_apigee_api_product
+    - field.field.node.api_product.field_apiproduct_access
+    - field.field.node.api_product.field_audience_roles
+    - field.field.node.api_product.field_product_owners
+    - node.type.api_product
+  module:
+    - feeds_ex
+    - feeds_tamper
+    - node
+third_party_settings:
+  feeds_tamper:
+    tampers:
+      3383452f-08ce-41ee-8a58-e2f3ed4141f1:
+        separator: ','
+        limit: null
+        plugin: explode
+        source: attributes_name_drupal_rbac_value
+        weight: -9
+        label: Explode
+        uuid: 3383452f-08ce-41ee-8a58-e2f3ed4141f1
+      bcb653bd-ea23-491b-a1d9-12cccc445f8f:
+        character: ''
+        side: trim
+        plugin: trim
+        source: attributes_name_drupal_rbac_value
+        weight: -8
+        label: 'Characters to trim'
+        uuid: bcb653bd-ea23-491b-a1d9-12cccc445f8f
+      d5d8c244-f4a9-44b4-87ab-30a96b708efa:
+        plugin: unique
+        source: attributes_name_drupal_rbac_value
+        weight: -7
+        label: Unique
+        uuid: d5d8c244-f4a9-44b4-87ab-30a96b708efa
+      55276feb-7e32-4a5c-804e-5f8f32362820:
+        separator: ','
+        limit: null
+        plugin: explode
+        source: attributes_name_drupal_product_owners_value
+        weight: -9
+        label: Explode
+        uuid: 55276feb-7e32-4a5c-804e-5f8f32362820
+      044ad071-73f8-4f78-ba0e-4281ae6465fc:
+        character: ''
+        side: trim
+        plugin: trim
+        source: attributes_name_drupal_product_owners_value
+        weight: -8
+        label: 'Characters to trim'
+        uuid: 044ad071-73f8-4f78-ba0e-4281ae6465fc
+      c7b8cee4-f74d-4c7d-a0f0-74f5b07cd87b:
+        plugin: unique
+        source: attributes_name_drupal_product_owners_value
+        weight: -7
+        label: Unique
+        uuid: c7b8cee4-f74d-4c7d-a0f0-74f5b07cd87b
+      840149b8-8cc6-4a05-adad-e06e59a881b1:
+        default_value: ''
+        only_if_empty: true
+        plugin: default_value
+        source: attributes_name_drupal_product_owners_value
+        weight: -10
+        label: 'Set value or default value'
+        uuid: 840149b8-8cc6-4a05-adad-e06e59a881b1
+      d56fe4ec-34cd-4f88-bc43-db5dcd61bf59:
+        default_value: ''
+        only_if_empty: true
+        plugin: default_value
+        source: attributes_name_drupal_rbac_value
+        weight: -10
+        label: 'Set value or default value'
+        uuid: d56fe4ec-34cd-4f88-bc43-db5dcd61bf59
+id: api_product_json_importer
+label: 'API Product JSON Importer'
+description: ''
+help: ''
+import_period: 900
+fetcher: directory
+fetcher_configuration:
+  allowed_extensions: json
+  allowed_schemes:
+    private: private
+  recursive_scan: false
+parser: jsonpath
+parser_configuration:
+  context:
+    value: '$.apiProduct.*'
+  sources:
+    displayname:
+      label: displayName
+      value: displayName
+    name:
+      label: name
+      value: name
+    json_description:
+      label: description
+      value: description
+    attributes_name_access_value2:
+      label: 'attributes[?(@.name==''access'')].value'
+      value: 'attributes[?(@.name==''access'')].value'
+    proxies:
+      label: proxies
+      value: proxies
+    attributes_name_drupal_product_owners_value:
+      label: 'attributes[?(@.name==''DRUPAL_PRODUCT_OWNERS'')].value'
+      value: 'attributes[?(@.name==''DRUPAL_PRODUCT_OWNERS'')].value'
+    attributes_name_drupal_rbac_value:
+      label: 'attributes[?(@.name==''DRUPAL_RBAC'')].value'
+      value: 'attributes[?(@.name==''DRUPAL_RBAC'')].value'
+  display_errors: false
+  source_encoding:
+    - auto
+  debug_mode: false
+  line_limit: 100
+processor: 'entity:node'
+processor_configuration:
+  langcode: en
+  update_existing: 2
+  update_non_existent: 'entity:unpublish_action:node'
+  expire: -1
+  owner_feed_author: false
+  owner_id: 0
+  authorize: false
+  skip_hash_check: false
+  values:
+    type: api_product
+custom_sources:
+  displayname:
+    label: displayName
+    value: displayName
+    machine_name: displayname
+  name:
+    label: name
+    value: name
+    machine_name: name
+  proxies:
+    label: proxies
+    value: proxies
+    machine_name: proxies
+  _displayname:
+    label: '@.displayName'
+    value: '@.displayName'
+    machine_name: _displayname
+  _name:
+    label: '@.name'
+    value: '@.name'
+    machine_name: _name
+  _proxies:
+    label: '@.proxies'
+    value: '@.proxies'
+    machine_name: _proxies
+  json_description:
+    label: description
+    value: description
+    machine_name: json_description
+  attributes_name_access_value:
+    label: 'attributes[@.name=''access''].value'
+    value: 'attributes[@.name=''access''].value'
+    machine_name: attributes_name_access_value
+  attributes_name_access_value2:
+    label: 'attributes[?(@.name==''access'')].value'
+    value: 'attributes[?(@.name==''access'')].value'
+    machine_name: attributes_name_access_value2
+  attributes_name_drupal_product_owners_value:
+    label: 'attributes[?(@.name==''DRUPAL_PRODUCT_OWNERS'')].value'
+    value: 'attributes[?(@.name==''DRUPAL_PRODUCT_OWNERS'')].value'
+    machine_name: attributes_name_drupal_product_owners_value
+  attributes_name_drupal_rbac_value:
+    label: 'attributes[?(@.name==''DRUPAL_RBAC'')].value'
+    value: 'attributes[?(@.name==''DRUPAL_RBAC'')].value'
+    machine_name: attributes_name_drupal_rbac_value
+mappings:
+  -
+    target: title
+    map:
+      value: displayname
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_apigee_api_product
+    map:
+      value: name
+    unique:
+      value: '1'
+    settings:
+      language: null
+  -
+    target: body
+    map:
+      value: json_description
+      summary: json_description
+    settings:
+      language: null
+      format: plain_text
+  -
+    target: field_apiproduct_access
+    map:
+      value: attributes_name_access_value2
+    settings:
+      language: null
+  -
+    target: field_api_doc
+    map:
+      target_id: proxies
+    settings:
+      language: ''
+      reference_by: field_apigee_proxy
+      feeds_item: guid
+      autocreate: 0
+  -
+    target: field_product_owners
+    map:
+      value: attributes_name_drupal_product_owners_value
+    unique: {  }
+    settings:
+      language: null
+      defuse: false
+  -
+    target: field_audience_roles
+    map:
+      value: attributes_name_drupal_rbac_value
+    unique: {  }
+    settings:
+      language: null

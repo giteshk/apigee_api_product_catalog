@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_apiproduct_access
+    - node.type.api_product
+  module:
+    - options
+id: node.api_product.field_apiproduct_access
+field_name: field_apiproduct_access
+entity_type: node
+bundle: api_product
+label: 'APIProduct Access'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: private
+default_value_callback: ''
+settings: {  }
+field_type: list_string

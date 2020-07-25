@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.team.field_api_products_aa
+  module:
+    - apigee_edge_teams
+id: team.team.field_api_products_aa
+field_name: field_api_products_aa
+entity_type: team
+bundle: team
+label: 'API Products Available'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:api_product'
+  handler_settings:
+    target_bundles: null
+    auto_create: false
+field_type: entity_reference

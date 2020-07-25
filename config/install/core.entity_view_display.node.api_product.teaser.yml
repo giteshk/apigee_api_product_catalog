@@ -1,0 +1,43 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.api_product.body
+    - field.field.node.api_product.feeds_item
+    - field.field.node.api_product.field_api_doc
+    - field.field.node.api_product.field_apigee_api_product
+    - field.field.node.api_product.field_apiproduct_access
+    - field.field.node.api_product.field_audience_roles
+    - field.field.node.api_product.field_image
+    - field.field.node.api_product.field_product_owners
+    - node.type.api_product
+  module:
+    - text
+    - user
+id: node.api_product.teaser
+targetEntityType: node
+bundle: api_product
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  feeds_item: true
+  field_api_doc: true
+  field_apigee_api_product: true
+  field_apiproduct_access: true
+  field_audience_roles: true
+  field_image: true
+  field_product_owners: true

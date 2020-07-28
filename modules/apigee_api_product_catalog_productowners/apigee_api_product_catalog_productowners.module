@@ -57,3 +57,19 @@ function apigee_api_product_catalog_productowners_form_sm_appdashboard_apigee_ap
     }
   }
 }
+
+function apigee_api_product_catalog_productowners_user_insert(\Drupal\user\Entity\User $user) {
+  $apiproducts = \Drupal\apigee_api_product_catalog_productowners\AppsDashboardStorageService::getProductsToAdminister($user);
+  if(!empty($apiproducts)) {
+    foreach(\Drupal\node\Entity\Node::loadMultiple(array_keys($apiproducts)) as $node) {
+      //Write the node grants for the product node
+      \Drupal::entityTypeManager()->getAccessControlHandler('node')->writeGrants($node);
+      //Rebuild the node grants for all the APIDoc nodes
+      apigee_api_product_catalog_node_insert($node);
+    }
+  }
+}
+
+function apigee_api_product_catalog_productowners_user_delete(\Drupal\user\Entity\User $user) {
+  apigee_api_product_catalog_productowners_user_insert($user);
+}

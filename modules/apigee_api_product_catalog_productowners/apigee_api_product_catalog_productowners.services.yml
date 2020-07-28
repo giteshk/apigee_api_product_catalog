@@ -1,0 +1,5 @@
+services:
+  apigee_api_product_catalog_productowners.route_subscriber:
+    class: Drupal\apigee_api_product_catalog_productowners\RouteSubscriber
+    tags:
+    - { name: event_subscriber }

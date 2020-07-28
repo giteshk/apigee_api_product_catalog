@@ -1,0 +1,49 @@
+<?php
+
+function apigee_api_product_catalog_install() {
+  $arr = array (
+    'type' =>
+      array (
+        0 =>
+          array (
+            'target_id' => 'api_product_json_importer',
+          ),
+      ),
+    'title' =>
+      array (
+        0 =>
+          array (
+            'value' => 'Apigee APIProduct Importer',
+          ),
+      ),
+    'source' =>
+      array (
+        0 =>
+          array (
+            'value' => 'private://apigee_api_product_feed_importer/apiproducts.json',
+          ),
+      ),
+  );
+  /* @var $filesystem \Drupal\Core\File\FileSystemInterface */
+  $filesystem = \Drupal::service('file_system');
+  $filesystem->mkdir("private://apigee_api_product_feed_importer/");
+  apigee_api_product_catalog_cron();
+  $feed = \Drupal\feeds\Entity\Feed::create($arr);
+  $feed->save();
+}
+
+function apigee_api_product_catalog_requirements($phase){
+  $requirements = [];
+  /* @var $filesystem \Drupal\Core\File\FileSystemInterface */
+  $filesystem = \Drupal::service('file_system');
+  $file_private_path = $filesystem->realpath("private://");
+  if (!(bool) $file_private_path) {
+    $url = Url::fromUri('https://www.drupal.org/docs/8/modules/apigee-edge/configure-the-connection-to-apigee-edge#configure-private-file');
+    $requirements[] = [
+      'description' => t('To use this module the private file system needs to be setup. ' . \Drupal\Core\Link::fromTextAndUrl("Documentation", $url)),
+      'title' => t('Private file system not set'),
+      'severity' => REQUIREMENT_ERROR
+    ];
+  }
+  return $requirements;
+}

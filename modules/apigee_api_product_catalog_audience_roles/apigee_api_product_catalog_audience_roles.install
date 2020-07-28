@@ -1,0 +1,4 @@
+<?php
+function apigee_api_product_catalog_audience_roles_install(){
+  node_access_needs_rebuild(TRUE);
+}

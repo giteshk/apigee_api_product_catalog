@@ -69,7 +69,7 @@ third_party_settings:
         label: 'Set value or default value'
         uuid: 840149b8-8cc6-4a05-adad-e06e59a881b1
       d56fe4ec-34cd-4f88-bc43-db5dcd61bf59:
-        default_value: ''
+        default_value: administrator
         only_if_empty: true
         plugin: default_value
         source: attributes_name_drupal_rbac_value

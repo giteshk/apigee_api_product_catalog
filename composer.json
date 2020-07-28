@@ -10,8 +10,8 @@
         }
     ],
     "require": {
+        "drupal/apigee_api_catalog" : "*",
         "drupal/apigee_edge" : "*",
-	"drupal/apigee_api_catalog" : "*",
         "drupal/sm_appdashboard_apigee" : "*",
         "drupal/feeds_tamper": "^2.0@beta",
         "drupal/feeds_ex": "^1.0@alpha",

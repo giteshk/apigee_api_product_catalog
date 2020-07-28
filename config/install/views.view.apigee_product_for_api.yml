@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_apigee_proxy
+    - field.storage.node.field_product_owners
     - node.type.api_product
     - node.type.apidoc
   module:
@@ -120,10 +120,10 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        field_apigee_proxy:
-          id: field_apigee_proxy
-          table: node__field_apigee_proxy
-          field: field_apigee_proxy
+        field_product_owners:
+          id: field_product_owners
+          table: node__field_product_owners
+          field: field_product_owners
           relationship: none
           group_type: group
           admin_label: ''
@@ -169,9 +169,8 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: false
+          type: basic_string
+          settings: {  }
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -179,7 +178,7 @@ display:
           delta_offset: 0
           delta_reversed: false
           delta_first_last: false
-          multi_type: separator
+          multi_type: ol
           separator: ', '
           field_api_classes: false
           plugin_id: field
@@ -371,7 +370,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:field.storage.node.field_apigee_proxy'
+        - 'config:field.storage.node.field_product_owners'
   block_1:
     display_plugin: block
     id: block_1
@@ -388,4 +387,4 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:field.storage.node.field_apigee_proxy'
+        - 'config:field.storage.node.field_product_owners'

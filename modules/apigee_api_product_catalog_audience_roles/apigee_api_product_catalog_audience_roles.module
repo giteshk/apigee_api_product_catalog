@@ -77,3 +77,38 @@ function apigee_api_product_catalog_audience_roles_node_grants(AccountInterface 
   }
   return $grants;
 }
+
+/**
+ * Implements hook_FORM_ID_form_alter
+ *
+ * Default the value of the RBAC field in edge.
+ *
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @param $form_id
+ */
+function apigee_api_product_catalog_audience_roles_form_apigee_edge_api_product_access_control_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  $form['rbac']['attribute_name']['#default_value'] = 'DRUPAL_RBAC';
+  $form['rbac']['attribute_name']['#attributes']['readonly'] = 'readonly';
+  $form['#submit'][] = 'apigee_api_product_catalog_audience_roles_form_apigee_edge_api_product_access_control_form_submit';
+}
+
+/**
+ * When the settings form is updated generate the API Product json file and
+ * trigger feeds import
+ *
+ * @param array $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *
+ * @throws \Exception
+ */
+function apigee_api_product_catalog_audience_roles_form_apigee_edge_api_product_access_control_form_submit(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  apigee_api_product_catalog_cron();
+  $fids = Drupal::entityQuery('feeds_feed')
+    ->condition('type', 'api_product_json_importer')
+    ->execute();
+  /* @var $feed \Drupal\feeds\FeedInterface*/
+  foreach(\Drupal\feeds\Entity\Feed::loadMultiple($fids) as $feed) {
+    $feed->startBatchImport();
+  }
+}

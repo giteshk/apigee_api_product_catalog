@@ -19,4 +19,5 @@
  */
 function apigee_api_product_catalog_audience_roles_install() {
   node_access_needs_rebuild(TRUE);
+  module_set_weight('apigee_api_product_catalog_audience_roles', 100);
 }

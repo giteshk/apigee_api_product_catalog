@@ -10,6 +10,8 @@
 # GNU General Public License for more details.
 
 name: 'Apigee Product Catalog'
+description: 'Creates an API Product catalog. Brings API Product entity into Drupal nodes.'
+package: 'Apigee Product Catalog'
 type: module
 core: 8.x
 dependencies:

@@ -48,7 +48,7 @@ function apigee_api_product_catalog_productowners_node_grants(AccountInterface $
 
 
 function apigee_api_product_catalog_productowners_form_sm_appdashboard_apigee_appdetails_edit_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
-  $allowed_products = \Drupal\apigee_api_product_catalog_productowners\AppsDashboardStorageService::getProductsToAdminister();
+  $allowed_products = \Drupal\apigee_api_product_catalog_productowners\ProductOwnerHelper::getProductsToAdminister();
   foreach($form['details__api_products']['app_credentials'] as &$credential) {
     foreach($credential['apiproduct'] as $key => &$value) {
       if(!in_array($key, $allowed_products)) {
@@ -59,7 +59,7 @@ function apigee_api_product_catalog_productowners_form_sm_appdashboard_apigee_ap
 }
 
 function apigee_api_product_catalog_productowners_user_insert(\Drupal\user\Entity\User $user) {
-  $apiproducts = \Drupal\apigee_api_product_catalog_productowners\AppsDashboardStorageService::getProductsToAdminister($user);
+  $apiproducts = \Drupal\apigee_api_product_catalog_productowners\ProductOwnerHelper::getProductsToAdminister($user);
   if(!empty($apiproducts)) {
     foreach(\Drupal\node\Entity\Node::loadMultiple(array_keys($apiproducts)) as $node) {
       //Write the node grants for the product node

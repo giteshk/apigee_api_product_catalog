@@ -1,5 +1,22 @@
 <?php
+/**
+ * Copyright 2020 Google LLC
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ */
 
+
+/**
+ * Create a new Feed item to process the API Product json
+ * This is supposed to be import the API Products from Apigee into
+ */
 function apigee_api_product_catalog_install() {
   $arr = array (
     'type' =>

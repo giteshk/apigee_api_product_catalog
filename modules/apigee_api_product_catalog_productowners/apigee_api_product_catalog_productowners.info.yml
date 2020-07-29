@@ -1,7 +1,18 @@
+# Copyright 2020 Google LLC
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# version 2 as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+
 name: 'Apigee API Product Catalog  - Product Owners'
 type: module
 core: 8.x
 dependencies:
-  - apigee_api_product_catalog
-  - sm_appdashboard_apigee
-  - apigee_edge_apiproduct_rbac
+  - apigee_api_product_catalog:apigee_api_product_catalog
+  - sm_appdashboard_apigee:sm_appdashboard_apigee
+  - apigee_edge:apigee_edge_apiproduct_rbac

@@ -14,25 +14,52 @@
 
 use Drupal\node\NodeInterface;
 
+
+/**
+ * Force rewrite of Node Grants for API Doc nodes associated to the API Doc node
+ *
+ * @param NodeInterface $node
+ */
+function _apigee_api_product_catalog_rewrite_apidoc_grants(NodeInterface $node){
+    if ($node->getType() == 'api_product') {
+        foreach($node->get('field_api_doc')->referencedEntities() as $item){
+            \Drupal::entityTypeManager()->getAccessControlHandler('node')->writeGrants($item);
+        }
+    }
+}
+/**
+ * Implements hook_ENTITY_ID_insert
+ * @param NodeInterface $node
+ */
 function apigee_api_product_catalog_node_insert(NodeInterface $node)
 {
-  if ($node->getType() == 'api_product') {
-    foreach($node->get('field_api_doc')->referencedEntities() as $item){
-      \Drupal::entityTypeManager()->getAccessControlHandler('node')->writeGrants($item);
-    }
-  }
+    _apigee_api_product_catalog_rewrite_apidoc_grants($node);
 }
 
+/**
+ * Implements hook_ENTITY_ID_update
+ * @param NodeInterface $node
+ */
 function apigee_api_product_catalog_node_update(NodeInterface $node)
 {
-  apigee_api_product_catalog_node_insert($node);
+    _apigee_api_product_catalog_rewrite_apidoc_grants($node);
 }
 
+/**
+ * Implements hook_ENTITY_ID_delete
+ * @param NodeInterface $node
+ */
 function apigee_api_product_catalog_node_delete(NodeInterface $node)
 {
-  apigee_api_product_catalog_node_insert($node);
+    _apigee_api_product_catalog_rewrite_apidoc_grants($node);
 }
 
+/**
+ * Implements hook_cron
+ *
+ * Load all the products from edge and write it to the json file which is
+ * consumed by the feeds module to generate the API Produce Nodes
+ */
 function apigee_api_product_catalog_cron(){
   /* @var $entity_manager \Drupal\Core\Entity\EntityTypeManagerInterface */
   $entity_manager = Drupal::service("entity_type.manager");

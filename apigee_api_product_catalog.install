@@ -49,6 +49,12 @@ function apigee_api_product_catalog_install() {
   $feed->save();
 }
 
+/**
+ * Ensure the private file system is setup for this module to work.
+ *
+ * @param $phase
+ * @return array
+ */
 function apigee_api_product_catalog_requirements($phase){
   $requirements = [];
   /* @var $filesystem \Drupal\Core\File\FileSystemInterface */

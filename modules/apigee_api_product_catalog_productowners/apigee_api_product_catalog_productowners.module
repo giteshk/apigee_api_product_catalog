@@ -12,8 +12,8 @@
  * GNU General Public License for more details.
  */
 
+use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
-use \Drupal\Core\Session\AccountInterface;
 
 /**
  * Implements hook_node_access_records
@@ -21,10 +21,10 @@ use \Drupal\Core\Session\AccountInterface;
  * Provides the product owners the ability to edit the API Product nodes.
  *
  * @param NodeInterface $node
+ *
  * @return array
  */
-function apigee_api_product_catalog_productowners_node_access_records(NodeInterface $node)
-{
+function apigee_api_product_catalog_productowners_node_access_records(NodeInterface $node) {
   $grants = [];
   if ($node->getType() == 'api_product') {
     /* @var $owner \Drupal\Core\Field\Plugin\Field\FieldType\EmailItem */
@@ -33,22 +33,24 @@ function apigee_api_product_catalog_productowners_node_access_records(NodeInterf
       $tags_to_invalidate[] = "apigee_api_product_catalog_productowners:{$owner->getString()}";
       $product_owner = user_load_by_mail(strtolower($owner->getString()));
       if ($product_owner !== FALSE) {
-        $grants[] = array(
+        $grants[] = [
           'realm' => 'apigee_api_product_catalog_productowner',
           'gid' => $product_owner->id(),
           'grant_view' => 1,
           'grant_update' => 1,
-          'grant_delete' => 0
-        );
+          'grant_delete' => 0,
+        ];
       }
     }
     //Invalidate product owner caches when rebuilding permissions
     \Drupal\Core\Cache\Cache::invalidateTags($tags_to_invalidate);
-  } else if ($node->getType() == 'apidoc') {
-    $nids = Drupal::entityQuery('node')
-      ->condition('type', 'api_product')
-      ->condition('field_api_doc', $node->id())
-      ->execute();
+  }
+  else {
+    if ($node->getType() == 'apidoc') {
+      $nids = Drupal::entityQuery('node')
+        ->condition('type', 'api_product')
+        ->condition('field_api_doc', $node->id())
+        ->execute();
       /**
        * Copy over the node access records from the API Product node and
        * assign it to the API Docs.
@@ -56,8 +58,9 @@ function apigee_api_product_catalog_productowners_node_access_records(NodeInterf
        * If an API Product is visible all API Docs(API Proxies) assigned
        * to the API Product should be visible.
        */
-    foreach(\Drupal\node\Entity\Node::loadMultiple($nids) as $product_node) {
-      $grants+=apigee_api_product_catalog_productowners_node_access_records($product_node);
+      foreach (\Drupal\node\Entity\Node::loadMultiple($nids) as $product_node) {
+        $grants += apigee_api_product_catalog_productowners_node_access_records($product_node);
+      }
     }
   }
   return $grants;
@@ -68,10 +71,10 @@ function apigee_api_product_catalog_productowners_node_access_records(NodeInterf
  *
  * @param AccountInterface $account
  * @param $op
+ *
  * @return array
  */
-function apigee_api_product_catalog_productowners_node_grants(AccountInterface $account, $op)
-{
+function apigee_api_product_catalog_productowners_node_grants(AccountInterface $account, $op) {
   $grants = [];
   if ($account->id()) {
     $grants['apigee_api_product_catalog_productowner'] = [
@@ -91,9 +94,9 @@ function apigee_api_product_catalog_productowners_node_grants(AccountInterface $
  */
 function apigee_api_product_catalog_productowners_form_sm_appdashboard_apigee_appdetails_edit_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
   $allowed_products = \Drupal\apigee_api_product_catalog_productowners\ProductOwnerHelper::getProductsToAdminister();
-  foreach($form['details__api_products']['app_credentials'] as &$credential) {
-    foreach($credential['apiproduct'] as $key => &$value) {
-      if(!in_array($key, $allowed_products)) {
+  foreach ($form['details__api_products']['app_credentials'] as &$credential) {
+    foreach ($credential['apiproduct'] as $key => &$value) {
+      if (!in_array($key, $allowed_products)) {
         $value['#disabled'] = TRUE;
       }
     }
@@ -101,31 +104,36 @@ function apigee_api_product_catalog_productowners_form_sm_appdashboard_apigee_ap
 }
 
 /**
- * Rebuild the node grants for API Products and API Docs on User (insert/delete) events
+ * Rebuild the node grants for API Products and API Docs on User
+ * (insert/delete) events
+ *
  * @param \Drupal\user\Entity\User $user
  */
-function _apigee_api_product_catalog_productowners_rebuild_node_grants(\Drupal\user\Entity\User $user){
-    /**
-     * Find out what products the user was a product owner for
-     */
-    $apiproducts = \Drupal\apigee_api_product_catalog_productowners\ProductOwnerHelper::getProductsToAdminister($user);
-    if(!empty($apiproducts)) {
-        foreach(\Drupal\node\Entity\Node::loadMultiple(array_keys($apiproducts)) as $node) {
-            //Write the node grants for the product node
-            \Drupal::entityTypeManager()->getAccessControlHandler('node')->writeGrants($node);
-            //Rebuild the node grants for all the APIDoc nodes
-            _apigee_api_product_catalog_rewrite_apidoc_grants($node);
-        }
+function _apigee_api_product_catalog_productowners_rebuild_node_grants(\Drupal\user\Entity\User $user) {
+  /**
+   * Find out what products the user was a product owner for
+   */
+  $apiproducts = \Drupal\apigee_api_product_catalog_productowners\ProductOwnerHelper::getProductsToAdminister($user);
+  if (!empty($apiproducts)) {
+    foreach (\Drupal\node\Entity\Node::loadMultiple(array_keys($apiproducts)) as $node) {
+      //Write the node grants for the product node
+      \Drupal::entityTypeManager()
+        ->getAccessControlHandler('node')
+        ->writeGrants($node);
+      //Rebuild the node grants for all the APIDoc nodes
+      _apigee_api_product_catalog_rewrite_apidoc_grants($node);
     }
+  }
 
 }
+
 /**
  * Implements hook_user_insert
  *
  * @param \Drupal\user\Entity\User $user
  */
 function apigee_api_product_catalog_productowners_user_insert(\Drupal\user\Entity\User $user) {
-    _apigee_api_product_catalog_productowners_rebuild_node_grants($user);
+  _apigee_api_product_catalog_productowners_rebuild_node_grants($user);
 }
 
 /**
@@ -134,5 +142,5 @@ function apigee_api_product_catalog_productowners_user_insert(\Drupal\user\Entit
  * @param \Drupal\user\Entity\User $user
  */
 function apigee_api_product_catalog_productowners_user_delete(\Drupal\user\Entity\User $user) {
-    _apigee_api_product_catalog_productowners_rebuild_node_grants($user);
+  _apigee_api_product_catalog_productowners_rebuild_node_grants($user);
 }

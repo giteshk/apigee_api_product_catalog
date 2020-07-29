@@ -15,20 +15,20 @@ package: 'Apigee Product Catalog'
 type: module
 core: 8.x
 dependencies:
-  - apigee_api_catalog
-  - block
-  - feeds
-  - feeds_ex
-  - feeds_tamper
-  - field
-  - file
-  - file_link
-  - media_library
-  - menu_ui
-  - node
-  - options
-  - path
-  - text
-  - user
-  - views
+- apigee_api_catalog
+- block
+- feeds
+- feeds_ex
+- feeds_tamper
+- field
+- file
+- file_link
+- media_library
+- menu_ui
+- node
+- options
+- path
+- text
+- user
+- views
 version: 8.x-1.0-alpha1

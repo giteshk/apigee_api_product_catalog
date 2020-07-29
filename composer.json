@@ -1,20 +1,20 @@
 {
-    "name": "giteshk/apigee_api_product_catalog",
-    "description": "Apigee API Product Catalog module for Drupal 8",
-    "type": "drupal-module",
-    "license": "GPL-2.0-or-later",
-    "authors": [
-        {
-            "name": "Gitesh Koli",
-            "email": "gkoli@google.com"
-        }
-    ],
-    "require": {
-        "drupal/apigee_api_catalog" : "*",
-        "drupal/apigee_edge" : "*",
-        "drupal/sm_appdashboard_apigee" : "*",
-        "drupal/feeds_tamper": "^2.0@beta",
-        "drupal/feeds_ex": "^1.0@alpha",
-        "flow/jsonpath": "^0.5.0"
+  "name": "giteshk/apigee_api_product_catalog",
+  "description": "Apigee API Product Catalog module for Drupal 8",
+  "type": "drupal-module",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Gitesh Koli",
+      "email": "gkoli@google.com"
     }
+  ],
+  "require": {
+    "drupal/apigee_api_catalog": "*",
+    "drupal/apigee_edge": "*",
+    "drupal/sm_appdashboard_apigee": "*",
+    "drupal/feeds_tamper": "^2.0@beta",
+    "drupal/feeds_ex": "^1.0@alpha",
+    "flow/jsonpath": "^0.5.0"
+  }
 }

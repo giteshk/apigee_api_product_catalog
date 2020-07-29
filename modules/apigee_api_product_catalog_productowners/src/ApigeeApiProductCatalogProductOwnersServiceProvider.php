@@ -19,13 +19,16 @@ use Drupal\Core\DependencyInjection\ServiceModifierInterface;
 
 /**
  * Class ApigeeApiProductCatalogProductOwnersServiceProvider
+ *
  * @package Drupal\apigee_api_product_catalog_productowners
  */
-class ApigeeApiProductCatalogProductOwnersServiceProvider implements   ServiceModifierInterface {
+class ApigeeApiProductCatalogProductOwnersServiceProvider implements ServiceModifierInterface {
+
   public function alter(ContainerBuilder $container) {
     $container
       ->getDefinition('sm_appsdashboard_apigee.appsdashboard_storage')
       ->setClass('Drupal\apigee_api_product_catalog_productowners\AppsDashboardStorageService');
 
   }
+
 }

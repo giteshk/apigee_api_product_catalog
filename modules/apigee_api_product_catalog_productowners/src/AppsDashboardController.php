@@ -14,23 +14,27 @@
 
 
 namespace Drupal\apigee_api_product_catalog_productowners;
+
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\sm_appdashboard_apigee\AppsDashboardStorageServiceInterface;
 
 /**
  * Class AppsDashboardController
+ *
  * @package Drupal\apigee_api_product_catalog_productowners
  */
 class AppsDashboardController extends \Drupal\sm_appdashboard_apigee\Controller\AppsDashboardController {
-    /**
-     * Verify if the user has access to administer the app
-     *
-     * @param AccountInterface $account
-     * @return mixed
-     */
-    public function access_app(AccountInterface $account) {
-    /* @var $storage_service AppsDashboardStorageServiceInterface*/
+
+  /**
+   * Verify if the user has access to administer the app
+   *
+   * @param AccountInterface $account
+   *
+   * @return mixed
+   */
+  public function access_app(AccountInterface $account) {
+    /* @var $storage_service AppsDashboardStorageServiceInterface */
     $storage_service = \Drupal::service("sm_appsdashboard_apigee.appsdashboard_storage");
     $apptype = \Drupal::routeMatch()->getParameter("apptype");
     $appid = \Drupal::routeMatch()->getParameter("appid");
@@ -38,12 +42,15 @@ class AppsDashboardController extends \Drupal\sm_appdashboard_apigee\Controller\
     return AccessResult::allowedIf(ProductOwnerHelper::hasAccessToAdministerApp($app, $account));
   }
 
-    /**
-     * Verify if the user has access to view the app dashboard
-     * @param AccountInterface $account
-     * @return mixed
-     */
-    public function access_dashboard(AccountInterface $account) {
+  /**
+   * Verify if the user has access to view the app dashboard
+   *
+   * @param AccountInterface $account
+   *
+   * @return mixed
+   */
+  public function access_dashboard(AccountInterface $account) {
     return AccessResult::allowedIf(!empty(ProductOwnerHelper::getProductsToAdminister($account)));
   }
+
 }

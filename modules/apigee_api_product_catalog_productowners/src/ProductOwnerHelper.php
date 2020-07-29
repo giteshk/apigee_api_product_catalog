@@ -1,18 +1,16 @@
 <?php
-// Copyright 2020 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
+/**
+ * Copyright 2020 Google LLC
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ */
 
 namespace Drupal\apigee_api_product_catalog_productowners;
 
@@ -24,9 +22,22 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\node\Entity\Node;
 use Drupal\Tests\field\Functional\Email\EmailFieldTest;
 
+/**
+ * Class ProductOwnerHelper
+ * @package Drupal\apigee_api_product_catalog_productowners
+ */
 class ProductOwnerHelper{
 
-  public static function getProductOwnersByApp(App $app) {
+    /**
+     * Returns the list of Product Owners for the App
+     * Returns two values
+     * - 'all' - All the product owners of the API Products the app consumes
+     * - 'pending' - all the product owners of the API Products pending approval on the app
+     *
+     * @param App $app
+     * @return array
+     */
+    public static function getProductOwnersByApp(App $app) {
     $products = [];
     foreach($app->getCredentials() as $credential) {
       foreach($credential->getApiProducts() as $product) {
@@ -58,6 +69,8 @@ class ProductOwnerHelper{
   }
 
   /**
+   * Gets a list of Products that the user can administer
+   *
    * @param AccountInterface|null $user
    * @return array
    */
@@ -90,7 +103,14 @@ class ProductOwnerHelper{
     return $api_products;
   }
 
-  public static function hasAccessToAdministerApp(App $app, AccountInterface $user = null){
+    /**
+     * Verify if user has access to administer any API Products on an App
+     *
+     * @param App $app
+     * @param AccountInterface|null $user
+     * @return bool
+     */
+    public static function hasAccessToAdministerApp(App $app, AccountInterface $user = null){
     $allowed_api_products = ProductOwnerHelper::getProductsToAdminister($user);
     foreach($app->getCredentials() as $credential){
       foreach($credential->getApiProducts() as $credentialProduct){

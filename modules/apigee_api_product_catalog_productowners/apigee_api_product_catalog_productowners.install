@@ -12,6 +12,9 @@
  * GNU General Public License for more details.
  */
 
+/*
+ * Implements hook_install
+ */
 function apigee_api_product_catalog_productowners_install(){
   node_access_needs_rebuild(TRUE);
 }

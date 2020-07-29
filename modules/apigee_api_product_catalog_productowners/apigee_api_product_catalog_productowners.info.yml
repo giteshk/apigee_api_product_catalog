@@ -9,7 +9,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 
-name: 'Apigee API Product Catalog  - Product Owners'
+name: Product Owners
+description: Adds the ability to assign product owners and enables the dashboard for administration
+package: Apigee Product Catalog
 type: module
 core: 8.x
 dependencies:
